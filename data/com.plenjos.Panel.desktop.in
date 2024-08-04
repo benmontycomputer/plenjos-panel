@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=panel
+Exec=plenjos-panel
+Icon=com.plenjos.Panel
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true

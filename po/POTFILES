@@ -1,0 +1,7 @@
+data/com.plenjos.Panel.desktop.in
+data/com.plenjos.Panel.appdata.xml.in
+data/com.plenjos.Panel.gschema.xml
+src/panel-window.ui
+src/main.c
+src/panel-window.c
+

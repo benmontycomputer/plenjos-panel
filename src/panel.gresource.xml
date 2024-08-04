@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/plenjos/Panel">
+    <file>panel-window.ui</file>
+    <file>panel-applications-menu.ui</file>
+    <file>theme.css</file>
+    <file>blur.glsl</file>
+  </gresource>
+</gresources>

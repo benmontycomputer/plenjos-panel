@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="panel">
+	<schema id="com.plenjos.Panel" path="/com/plenjos/Panel/">
+    <key name="items-names" type="as">
+      <default>['Files','Firefox','System Monitor','Terminal']</default>
+    </key>
+	  <key name="items-paths" type="as">
+      <default>['/usr/bin/nautilus','/usr/bin/firefox','/usr/bin/gnome-system-monitor','/usr/bin/gnome-terminal']</default>
+    </key>
+	  <key name="items-icons" type="as">
+      <default>['nautilus','firefox','system-monitor','terminal']</default>
+    </key>
+	  <key name="items-desktop-paths" type="as">
+	    <default>['/usr/share/applications/org.gnome.Nautilus.desktop', '/usr/share/applications/firefox.desktop', '/usr/share/applications/gnome-system-monitor.desktop', '/usr/share/applications/org.gnome.Terminal.desktop']</default>
+	  </key>
+	  <key name="favorites-desktop-paths" type="as">
+	    <default>['/usr/share/applications/org.gnome.Nautilus.desktop', '/usr/share/applications/firefox.desktop', '/usr/share/applications/gnome-system-monitor.desktop', '/usr/share/applications/org.gnome.Terminal.desktop']</default>
+	  </key>
+	</schema>
+</schemalist>
