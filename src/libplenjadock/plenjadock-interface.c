@@ -36,8 +36,6 @@ struct _PlenjaDockInterface
 
   GSettings *settings;
 
-  WnckHandle *wnck_handle;
-
   GtkIconTheme *icon_theme;
   int icon_size;
 
@@ -336,6 +334,10 @@ void plenjadock_interface_app_opened (WnckScreen          *screen,
           }
         }
 
+        xdg_data_dirs[data_dir_index] = realloc (xdg_data_dirs [data_dir_index], data_dir_current_pos + 1);
+        
+        xdg_data_dirs[data_dir_index][data_dir_current_pos] = '\0';
+
         xdg_data_dirs_count = data_dir_index + 1;
 
         // This is needed for the free_string_list() later
@@ -557,12 +559,10 @@ void plenjadock_interface_launch_dashboard (GtkWidget             *widget,
 }
 
 int plenjadock_interface_start (PlenjaDockInterface *self) {
-  self->wnck_handle = wnck_handle_new (WNCK_CLIENT_TYPE_PAGER);
-
   self->icon_theme = gtk_icon_theme_get_default ();
   self->icon_size = 52;
 
-  self->screen = wnck_handle_get_default_screen (self->wnck_handle);
+  self->screen = wnck_screen_get_default();
 
   g_signal_connect (self->screen, "application-opened", G_CALLBACK (plenjadock_interface_app_opened), self);
   g_signal_connect (self->screen, "application-closed", G_CALLBACK (plenjadock_interface_app_closed), self);
@@ -570,7 +570,7 @@ int plenjadock_interface_start (PlenjaDockInterface *self) {
   g_signal_connect (self->screen, "window-opened", G_CALLBACK (plenjadock_interface_window_opened), self);
 
   gint scale_factor = gtk_widget_get_scale_factor (GTK_WIDGET (self->apps_container));
-  wnck_handle_set_default_icon_size (self->wnck_handle, 52 * scale_factor);
+  wnck_set_default_icon_size(52 * scale_factor);
 
   PlenjaDockApplication *dashboard_shortcut = g_object_new (PLENJADOCK_TYPE_APPLICATION, NULL);
 

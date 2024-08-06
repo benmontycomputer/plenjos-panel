@@ -41,8 +41,6 @@ struct _PanelApplicationsMenu
 
   GdkPixbuf *desktop_blurred;
 
-  WnckHandle *wnck_handle;
-
   GdkRectangle monitor_geometry;
 
   GSettings *settings;
@@ -235,8 +233,6 @@ panel_applications_menu_init (PanelApplicationsMenu *self)
   }
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  self->wnck_handle = wnck_handle_new (WNCK_CLIENT_TYPE_PAGER);
 
   g_signal_connect (&self->parent_instance, "key_press_event", G_CALLBACK (check_escape), NULL);
   g_signal_connect (&self->parent_instance, "focus-out-event", G_CALLBACK (focus_out_event), NULL);

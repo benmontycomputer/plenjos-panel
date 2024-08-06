@@ -154,7 +154,12 @@ gboolean on_configure_event (GtkWidget *widget, GdkEventConfigure config, PanelW
   (void)widget;
   if (config.x != ((self->monitor_geometry.width) - config.width) / 2
       || config.y != self->monitor_geometry.height - config.height) {
-    gdk_window_move (config.window, (self->monitor_geometry.width - config.width) / 2, self->monitor_geometry.height - config.height);
+    //if (gdk_window_is_visible(config.window))
+    //  gdk_window_move (config.window, (self->monitor_geometry.width - config.width) / 2, self->monitor_geometry.height - config.height);
+
+    printf("%d %d %d %d\n", self->monitor_geometry.width, self->monitor_geometry.height, config.width, config.height);
+    fflush(stdout);
+    //gtk_window_move (GTK_WINDOW (widget), (self->monitor_geometry.width - config.width) / 2, self->monitor_geometry.height - config.height);
   }
 
   return FALSE;
