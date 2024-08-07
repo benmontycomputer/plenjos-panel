@@ -204,7 +204,7 @@ panel_window_init (PanelWindow *self)
 
   GdkWindow *dock_window = gtk_widget_get_window (GTK_WIDGET (&self->parent_instance));
 
-  gdk_monitor_get_geometry (gdk_display_get_monitor_at_window (gtk_widget_get_display (GTK_WIDGET (&self->parent_instance)), gtk_widget_get_window (GTK_WIDGET (&self->parent_instance))), &self->monitor_geometry);
+  gdk_monitor_get_geometry (gdk_display_get_monitor_at_window (gdk_display_get_default (), gtk_widget_get_window (GTK_WIDGET (&self->parent_instance))), &self->monitor_geometry);
 
   gtk_widget_set_size_request (GTK_WIDGET (&self->parent_instance), 0, 72);
   gdk_window_move (dock_window, self->monitor_geometry.width / 2, self->monitor_geometry.height - 72);
