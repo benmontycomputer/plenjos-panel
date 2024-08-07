@@ -151,14 +151,13 @@ gboolean expose_draw (GtkWidget *widget, cairo_t *cr, PanelWindow *self) {
 }
 
 gboolean on_configure_event (GtkWidget *widget, GdkEventConfigure config, PanelWindow *self) {
-  (void)widget;
-  if (config.x != ((self->monitor_geometry.width) - config.width) / 2
-      || config.y != self->monitor_geometry.height - config.height) {
-    gdk_window_move (config.window, (self->monitor_geometry.width - config.width) / 2, self->monitor_geometry.height - config.height);
+  printf("%d %d %d %d\n", self->monitor_geometry.x, self->monitor_geometry.y, self->monitor_geometry.height, self->monitor_geometry.width);
+  fflush(stdout);
 
-    printf("%d %d %d %d\n", self->monitor_geometry.width, self->monitor_geometry.height, config.width, config.height);
-    fflush(stdout);
-    //gtk_window_move (GTK_WINDOW (widget), (self->monitor_geometry.width - config.width) / 2, self->monitor_geometry.height - config.height);
+  (void)widget;
+  if (GDK_IS_WINDOW (config.window) && (config.x != ((self->monitor_geometry.width) - config.width) / 2
+      || config.y != self->monitor_geometry.height - config.height)) {
+    gdk_window_move (config.window, (self->monitor_geometry.width - config.width) / 2, self->monitor_geometry.height - config.height);
   }
 
   return FALSE;
@@ -193,7 +192,7 @@ panel_window_init (PanelWindow *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_signal_connect (&self->parent_instance, "configure-event", G_CALLBACK (on_configure_event), self);
-
+  
   g_signal_connect (&self->parent_instance, "draw", G_CALLBACK (expose_draw), self);
   g_signal_connect (&self->parent_instance, "screen-changed", G_CALLBACK (screen_changed), self);
 
@@ -202,9 +201,9 @@ panel_window_init (PanelWindow *self)
   // TODO: should this be gtk_window_present () instead?
   gtk_widget_show (GTK_WIDGET (&self->parent_instance));
 
-  GdkWindow *dock_window = gtk_widget_get_window (GTK_WIDGET (&self->parent_instance));
-
   gdk_monitor_get_geometry (gdk_display_get_monitor_at_window (gdk_display_get_default (), gtk_widget_get_window (GTK_WIDGET (&self->parent_instance))), &self->monitor_geometry);
+
+  GdkWindow *dock_window = gtk_widget_get_window (GTK_WIDGET (&self->parent_instance));
 
   gtk_widget_set_size_request (GTK_WIDGET (&self->parent_instance), 0, 72);
   gdk_window_move (dock_window, self->monitor_geometry.width / 2, self->monitor_geometry.height - 72);
