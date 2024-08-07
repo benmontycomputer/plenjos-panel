@@ -194,10 +194,10 @@ void menu_window_show_activate (GtkMenuItem *menu_item,
 }
 
 gboolean plenjadock_application_on_click (GtkWidget             *widget,
-                                          GdkEventButton         event,
+                                          GdkEventButton        *event,
                                           PlenjaDockApplication *self)
 {
-  if (event.button == GDK_BUTTON_SECONDARY) {
+  if (event->button == GDK_BUTTON_SECONDARY) {
     gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
     char *desktop_path = plenjadock_application_get_desktop_path (self);
     printf ("desktop: %s\n", desktop_path);
@@ -349,7 +349,7 @@ gboolean plenjadock_application_on_click (GtkWidget             *widget,
 
     free (desktop_path);
   }
-  else if (event.button == GDK_BUTTON_PRIMARY) {
+  else if (event->button == GDK_BUTTON_PRIMARY) {
     if (!self->app) {
       // launch the app
 
@@ -437,12 +437,12 @@ void plenjadock_application_unrender (PlenjaDockApplication *self) {
 }
 
 gboolean hover_start (GtkWidget        *widget,
-                      GdkEventCrossing  event,
+                      GdkEventCrossing  *event,
                       gpointer          user_data)
 {
   // fix unused parameter warning
   (void)user_data;
-  if (event.mode != GDK_CROSSING_NORMAL) {
+  if (event->mode != GDK_CROSSING_NORMAL) {
     return FALSE;
   }
 
@@ -452,12 +452,12 @@ gboolean hover_start (GtkWidget        *widget,
 }
 
 gboolean hover_end (GtkWidget        *widget,
-                    GdkEventCrossing  event,
+                    GdkEventCrossing  *event,
                     gpointer          user_data)
 {
   // fix unused parameter warning
   (void)user_data;
-  if (event.mode != GDK_CROSSING_NORMAL) {
+  if (event->mode != GDK_CROSSING_NORMAL) {
     return FALSE;
   }
 

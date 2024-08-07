@@ -150,14 +150,11 @@ gboolean expose_draw (GtkWidget *widget, cairo_t *cr, PanelWindow *self) {
   return FALSE;
 }
 
-gboolean on_configure_event (GtkWidget *widget, GdkEventConfigure config, PanelWindow *self) {
-  printf("%d %d %d %d\n", self->monitor_geometry.x, self->monitor_geometry.y, self->monitor_geometry.height, self->monitor_geometry.width);
-  fflush(stdout);
-
+gboolean on_configure_event (GtkWidget *widget, GdkEventConfigure *event, PanelWindow *self) {
   (void)widget;
-  if (GDK_IS_WINDOW (config.window) && (config.x != ((self->monitor_geometry.width) - config.width) / 2
-      || config.y != self->monitor_geometry.height - config.height)) {
-    gdk_window_move (config.window, (self->monitor_geometry.width - config.width) / 2, self->monitor_geometry.height - config.height);
+  if (GDK_IS_WINDOW (event->window) && (event->x != ((self->monitor_geometry.width) - event->width) / 2
+      || event->y != self->monitor_geometry.height - event->height)) {
+    gdk_window_move (event->window, (self->monitor_geometry.width - event->width) / 2, self->monitor_geometry.height - event->height);
   }
 
   return FALSE;

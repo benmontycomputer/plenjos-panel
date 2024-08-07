@@ -101,7 +101,7 @@ typedef struct {
   PanelApplicationsMenu *self;
 } ClickedArgs;
 
-static void applications_menu_app_clicked (GtkWidget *widget, GdkEventButton event, ClickedArgs *args)
+static void applications_menu_app_clicked (GtkWidget *widget, GdkEventButton *event, ClickedArgs *args)
 {
   // stops unused parameter warning
   (void)event;
