@@ -74,6 +74,18 @@
   padding: 0px 20px;
 }
 
+#panel_applications_menu_scrolled_window {
+  box-shadow: none;
+  border: none;
+  border-image: none;
+}
+
+#panel_applications_menu_scrolled_window * {
+  box-shadow: none;
+  border: none;
+  border-image: none;
+}
+
 .applications_menu_window_button {
   background-color: transparent;
   border: none;
