@@ -22,11 +22,6 @@
   transition-duration: 0.1s;
 }
 
-#dockitemshadow {
-  box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
-}
-
 #dockindicatorinactive {
   opacity: 0;
 }
@@ -63,74 +58,20 @@
   background-color: transparent;
 }
 
-#panel_dashboard_grid {
-  /*background: linear-gradient(45deg, rgba(128, 0, 0, 0.8), rgba(0, 0, 128, 0.8));*/
-  /*background-image: url("file:///home/plenjamin/Projects/PlenjOS Desktop/Dashboard/build/test.jpg");*/
-  /*background: transparent;*/
-  background-color: rgba(0, 0, 0, 0.4);
-  border-width: 0px;
-}
-
-#panel_dashboard_window:visited {
-  transition: 300ms;
-  opacity: 1;
-}
-
-#panel_dashboard_window {
-  transition: 300ms;
-  opacity: 0;
-}
-
-#panel_dashboard_item {
-  border-radius: 24px;
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-#panel_dashboard_item:hover {
-  background-color: rgba(128, 128, 128, 0.3);
-}
-
-.dashboard_window_button {
-  background-color: transparent;
-  border: none;
-  box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.6);
-  padding: 0px;
-}
-
-.dashboard_window_button:hover {
-  border: 3px solid #3584e4;
-}
-
-#panel_applications_menu_window {
-  box-shadow: 0px 0px 10px 10px white;
-  border-width: 0px;
-  border-radius: 12px;
-}
-
-#panel_applications_menu_grid {
-  border-width: 0px;
-  margin-top: 24px;
-}
-
-#panel_applications_menu_scrolled_window {
-  /*background-color: rgba(45, 125, 209, 1);*/
-  /*background-color: rgba(180, 210, 240, 0.8);*/
-  background-color: rgba(53, 57, 58, 0.6);
-  border-radius: 12px;
-  border: 1px solid rgba(53, 57, 58, 1);
-}
-
 #panel_applications_menu_item {
   border-radius: 12px;
-  background-color: transparent;
+  background-image: none;
   border: none;
   box-shadow: none;
 }
 
 #panel_applications_menu_item:hover {
   background-color: rgba(128, 128, 128, 0.3);
+}
+
+#panel_applications_menu_search_entry {
+  border-radius: 120px;
+  padding: 0px 20px;
 }
 
 .applications_menu_window_button {

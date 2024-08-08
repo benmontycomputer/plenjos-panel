@@ -21,7 +21,6 @@
 #define WNCK_I_KNOW_THIS_IS_UNSTABLE
 
 #include <gtk/gtk.h>
-#include <libhandy-1/handy.h>
 #include <math.h>
 #include <gdk/gdkx.h>
 #include <ctype.h>
@@ -32,7 +31,7 @@ G_BEGIN_DECLS
 
 #define PANEL_TYPE_APPLICATIONS_MENU (panel_applications_menu_get_type())
 
-G_DECLARE_FINAL_TYPE (PanelApplicationsMenu, panel_applications_menu, PANEL, APPLICATIONS_MENU, HdyApplicationWindow)
+G_DECLARE_FINAL_TYPE (PanelApplicationsMenu, panel_applications_menu, PANEL, APPLICATIONS_MENU, GtkApplicationWindow)
 
 G_END_DECLS
 

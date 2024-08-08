@@ -38,8 +38,6 @@ struct _PlenjaDockApplication
 
   GtkImage *indicator;
 
-  GtkImage *shadow;
-
   gchar *icon_name;
   gchar *exec_path;
 
@@ -415,11 +413,6 @@ void plenjadock_application_unrender (PlenjaDockApplication *self) {
   }
   self->icon = NULL;
 
-  if (GTK_IS_WIDGET (self->shadow)) {
-    gtk_widget_destroy (GTK_WIDGET (self->shadow));
-  }
-  self->shadow = NULL;
-
   if (GDK_IS_PIXBUF (self->indicator_pixbuf)) {
     g_object_unref (self->indicator_pixbuf);
   }
@@ -493,18 +486,18 @@ GtkWidget *plenjadock_application_render (PlenjaDockApplication *self) {
   gboolean fallback_icon = FALSE;
 
   if (self->icon_name)
-    icon_unscaled = gtk_icon_theme_load_icon_for_scale (self->icon_theme, self->icon_name, self->icon_size, self->scale, 0, NULL);
+    icon_unscaled = gtk_icon_theme_load_icon_for_scale (self->icon_theme, self->icon_name, self->icon_size, self->scale, GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
   else if (WNCK_IS_APPLICATION (self->app) && !wnck_application_get_icon_is_fallback (self->app)) {
     // I'm pretty sure this shouldn't be g_object_unref()'d after
     icon_unscaled = wnck_application_get_icon (self->app);
     free_icon_unscaled = FALSE;
   } else {
-    icon_unscaled = gtk_icon_theme_load_icon_for_scale (self->icon_theme, "application-x-executable", self->icon_size, self->scale, 0, NULL);
+    icon_unscaled = gtk_icon_theme_load_icon_for_scale (self->icon_theme, "application-x-executable", self->icon_size, self->scale, GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
     fallback_icon = TRUE;
   }
 
   if (!icon_unscaled) {
-    icon_unscaled = gtk_icon_theme_load_icon_for_scale (self->icon_theme, "application-x-executable", self->icon_size, self->scale, 0, NULL);
+    icon_unscaled = gtk_icon_theme_load_icon_for_scale (self->icon_theme, "application-x-executable", self->icon_size, self->scale, GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
     fallback_icon = TRUE;
   }
 
@@ -521,12 +514,7 @@ GtkWidget *plenjadock_application_render (PlenjaDockApplication *self) {
     g_object_unref (icon_unscaled);
   }
 
-  self->shadow = GTK_IMAGE (gtk_image_new ());
-  if (!fallback_icon)
-    gtk_widget_set_name (GTK_WIDGET (self->shadow), "dockitemshadow");
-  gtk_widget_set_size_request (GTK_WIDGET (self->shadow), 46, 46);
-
-  GdkPixbuf *indicator_unscaled = gdk_pixbuf_new_from_file ("../data/icons/hicolor/scalable/status/plenjadock-app-open-indicator.svg", NULL);
+  GdkPixbuf *indicator_unscaled = gtk_icon_theme_load_icon_for_scale(self->icon_theme, "plenjadock-app-open-indicator", 4, self->scale, 0, NULL); //gdk_pixbuf_new_from_file ("../data/icons/hicolor/scalable/status/plenjadock-app-open-indicator.svg", NULL);
 
   self->indicator_pixbuf = gdk_pixbuf_scale_simple (indicator_unscaled, 4, 4, GDK_INTERP_BILINEAR);
 
@@ -543,7 +531,6 @@ GtkWidget *plenjadock_application_render (PlenjaDockApplication *self) {
 
   self->fixed = GTK_FIXED (gtk_fixed_new ());
 
-  gtk_fixed_put (self->fixed, GTK_WIDGET (self->shadow), 7, 8);
   gtk_fixed_put (self->fixed, GTK_WIDGET (self->icon), 2, 3);
   gtk_fixed_put (self->fixed, GTK_WIDGET (self->indicator), 28, 57);
 

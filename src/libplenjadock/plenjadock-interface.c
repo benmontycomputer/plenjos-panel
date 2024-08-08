@@ -245,7 +245,9 @@ void plenjadock_interface_app_opened (WnckScreen          *screen,
   GList *windows = wnck_application_get_windows (app);
 
   for (GList *window = windows; window != NULL; window = window->next) {
-    if (WNCK_IS_WINDOW (window->data) && !wnck_window_is_skip_tasklist (WNCK_WINDOW (window->data))) {
+    if (WNCK_IS_WINDOW (window->data) && !wnck_window_is_skip_tasklist (WNCK_WINDOW (window->data)) && strcmp(wnck_window_get_class_group_name (window->data), "Plenjos-panel")) {
+      const char *class_group_name = wnck_window_get_class_group_name (window->data);
+
       gulong xid = wnck_window_get_xid (window->data);
 
       GdkDisplay *display = gdk_display_get_default ();
@@ -294,8 +296,6 @@ void plenjadock_interface_app_opened (WnckScreen          *screen,
       result[newlen] = '\0';
 
       free (path);
-
-      const char *class_group_name = wnck_window_get_class_group_name (window->data);
 
       char *desktop_path = NULL;
 
@@ -357,8 +357,6 @@ void plenjadock_interface_app_opened (WnckScreen          *screen,
           desktop_path = malloc (desktop_path_len);
 
           snprintf (desktop_path, desktop_path_len, "%s/applications/%s.desktop", xdg_data_dirs[i], prop_text);
-          printf ("%s\n", desktop_path);
-          fflush(stdout);
 
           if (!access (desktop_path, F_OK)) {
             printf ("could access %s\n", desktop_path);
@@ -381,8 +379,6 @@ void plenjadock_interface_app_opened (WnckScreen          *screen,
             desktop_path = malloc (desktop_path_len);
 
             snprintf (desktop_path, desktop_path_len, "%s/applications/%s.desktop", xdg_data_dirs[i], class_group_name);
-            printf ("%s", desktop_path);
-            fflush(stdout);
 
             if (!access (desktop_path, F_OK)) {
               printf ("could access %s\n", desktop_path);
@@ -546,14 +542,14 @@ void plenjadock_interface_set_apps_container (PlenjaDockInterface *self,
 }
 
 void plenjadock_interface_launch_dashboard (GtkWidget             *widget,
-                                             GdkEventButton         event,
+                                             GdkEventButton        *event,
                                              PlenjaDockInterface *self)
 {
   // fix unused parameter warning
   (void)widget;
   printf("test2\n");
   fflush(stdout);
-  if (event.button == GDK_BUTTON_PRIMARY) {
+  if (event->button == GDK_BUTTON_PRIMARY) {
     g_signal_emit (self, interface_signals[SIGNAL_PANEL_DASHBOARD_SHOW_REQUEST], 0);
   }
 }
