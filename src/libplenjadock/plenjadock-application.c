@@ -483,8 +483,6 @@ GtkWidget *plenjadock_application_render (PlenjaDockApplication *self) {
   GdkPixbuf *icon_unscaled;
   gboolean free_icon_unscaled = TRUE;
 
-  gboolean fallback_icon = FALSE;
-
   if (self->icon_name)
     icon_unscaled = gtk_icon_theme_load_icon_for_scale (self->icon_theme, self->icon_name, self->icon_size, self->scale, GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
   else if (WNCK_IS_APPLICATION (self->app) && !wnck_application_get_icon_is_fallback (self->app)) {
@@ -493,12 +491,10 @@ GtkWidget *plenjadock_application_render (PlenjaDockApplication *self) {
     free_icon_unscaled = FALSE;
   } else {
     icon_unscaled = gtk_icon_theme_load_icon_for_scale (self->icon_theme, "application-x-executable", self->icon_size, self->scale, GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
-    fallback_icon = TRUE;
   }
 
   if (!icon_unscaled) {
     icon_unscaled = gtk_icon_theme_load_icon_for_scale (self->icon_theme, "application-x-executable", self->icon_size, self->scale, GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
-    fallback_icon = TRUE;
   }
 
   self->icon = GTK_IMAGE (gtk_image_new ());

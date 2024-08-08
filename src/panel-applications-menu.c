@@ -72,10 +72,10 @@ void hide_applications_menu(PanelApplicationsMenu *self)
 
 void show_applications_menu(PanelApplicationsMenu *self)
 {
-  gtk_window_present(&self->parent_instance);
+  gtk_window_present(GTK_WINDOW (&self->parent_instance));
 
-  gtk_window_resize (GTK_WINDOW (&self->parent_instance), self->monitor_geometry.width, self->monitor_geometry.height);
-  gtk_window_move (GTK_WINDOW (&self->parent_instance), 0, 0);
+  gtk_window_resize(GTK_WINDOW(&self->parent_instance), self->monitor_geometry.width, self->monitor_geometry.height);
+  gtk_window_move(GTK_WINDOW(&self->parent_instance), 0, 0);
 }
 
 static gboolean check_escape(GtkWidget *widget, GdkEventKey *event, gpointer data)
@@ -83,7 +83,7 @@ static gboolean check_escape(GtkWidget *widget, GdkEventKey *event, gpointer dat
   (void)data;
   if (event->keyval == GDK_KEY_Escape)
   {
-    hide_applications_menu(widget);
+    applications_menu_hide(widget);
     return TRUE;
   }
   return FALSE;
@@ -94,7 +94,7 @@ static void focus_out_event(GtkWidget *widget, GdkEventFocus *event, gpointer us
   (void)event;
   (void)user_data;
 
-  hide_applications_menu(widget);
+  applications_menu_hide(widget);
 }
 
 typedef struct
@@ -267,8 +267,6 @@ gboolean expose_draw_dashboard(GtkWidget *widget, cairo_t *cr, PanelApplications
     gint x_win, y_win;
     gdk_window_get_position(gtk_widget_get_window(widget), &x_win, &y_win);
     gdk_cairo_set_source_pixbuf(cr, self->desktop_blurred, -x_win, -y_win);
-    printf("test\n\n");
-    fflush(stdout);
   }
   else
   {
@@ -288,6 +286,55 @@ gboolean expose_draw_dashboard(GtkWidget *widget, cairo_t *cr, PanelApplications
   cairo_restore(cr);
 
   return FALSE;
+}
+
+// https://stackoverflow.com/questions/9210528/split-string-with-delimiters-in-c
+char **str_split(char *a_str, const char a_delim)
+{
+  char **result = 0;
+  size_t count = 0;
+  char *tmp = a_str;
+  char *last_comma = 0;
+  char delim[2];
+  delim[0] = a_delim;
+  delim[1] = 0;
+
+  /* Count how many elements will be extracted. */
+  while (*tmp)
+  {
+    if (a_delim == *tmp)
+    {
+      count++;
+      last_comma = tmp;
+    }
+    tmp++;
+  }
+
+  /* Add space for trailing token. */
+  count += last_comma < (a_str + strlen(a_str) - 1);
+
+  /* Add space for terminating null string so caller
+     knows where the list of returned strings ends. */
+  count++;
+
+  result = malloc(sizeof(char *) * count);
+
+  if (result)
+  {
+    size_t idx = 0;
+    char *token = strtok(a_str, delim);
+
+    while (token)
+    {
+      assert(idx < count);
+      *(result + idx++) = strdup(token);
+      token = strtok(0, delim);
+    }
+    assert(idx == count - 1);
+    *(result + idx) = 0;
+  }
+
+  return result;
 }
 
 static void
@@ -337,37 +384,51 @@ panel_applications_menu_init(PanelApplicationsMenu *self)
   }
   else
   {
-    // For now, use "/usr/share/applications"
-    // TODO: actually use xdg_data_dirs
-
     // https://stackoverflow.com/questions/7704144/how-do-i-use-glib-or-any-other-library-to-list-all-the-files-in-a-directory
-    DIR *d;
-    struct dirent *dir;
-    d = opendir("/usr/share/applications");
-    if (d)
-    {
-      while ((dir = readdir(d)) != NULL)
+    char **data_dirs_list = str_split(data_dirs, ':');
+
+    for (size_t data_dir_index = 0; data_dirs_list[data_dir_index]; data_dir_index++) {
+      size_t applications_dir_len = strlen(data_dirs_list[data_dir_index]) + strlen("/applications/") + 1;
+      char *applications_dir = malloc(applications_dir_len);
+
+      snprintf(applications_dir, applications_dir_len, "%s/applications/", data_dirs_list[data_dir_index]);
+
+      DIR *d;
+      struct dirent *dir;
+
+      d = opendir(applications_dir);
+      if (d)
       {
-        GKeyFile *key_file = g_key_file_new();
-
-        size_t len = strlen("/usr/share/applications/") + strlen(dir->d_name) + 1;
-        char *path = malloc(len);
-
-        snprintf(path, len, "/usr/share/applications/%s", dir->d_name);
-
-        if (g_key_file_load_from_file(key_file, path, G_KEY_FILE_NONE, NULL))
+        while ((dir = readdir(d)) != NULL)
         {
-          applications = g_list_append(applications, key_file);
-        }
-        else
-        {
-          g_key_file_free(key_file);
-        }
+          GKeyFile *key_file = g_key_file_new();
 
-        free(path);
+          size_t len = strlen(applications_dir) + strlen(dir->d_name) + 1;
+          char *path = malloc(len);
+
+          snprintf(path, len, "%s%s", applications_dir, dir->d_name);
+
+          printf("%s\n", path);
+          fflush(stdout);
+          if (g_key_file_load_from_file(key_file, path, G_KEY_FILE_NONE, NULL))
+          {
+            printf("%s\n", path);
+            applications = g_list_append(applications, key_file);
+          }
+          else
+          {
+            g_key_file_free(key_file);
+          }
+
+          free(path);
+        }
+        closedir(d);
       }
-      closedir(d);
+
+      free (applications_dir);
     }
+
+    fflush(stdout);
 
     applications = g_list_sort(applications, (GCompareFunc)sort_apps);
 

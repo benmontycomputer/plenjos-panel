@@ -24,6 +24,7 @@
 #include <math.h>
 #include <gdk/gdkx.h>
 #include <ctype.h>
+#include <assert.h>
 
 #include <libwnck/libwnck.h>
 
