@@ -18,15 +18,11 @@
 
 #pragma once
 
-#define WNCK_I_KNOW_THIS_IS_UNSTABLE
-
 #include <gtk/gtk.h>
 #include <math.h>
 #include <gdk/gdkx.h>
 #include <ctype.h>
 #include <assert.h>
-
-#include <libwnck/libwnck.h>
 
 G_BEGIN_DECLS
 

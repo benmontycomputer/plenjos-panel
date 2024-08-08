@@ -9,7 +9,6 @@ cc = meson.get_compiler('c')
 libplenjadock_deps = [
   dependency('gtk+-3.0', version: '>= 3.22'),
   dependency('gtk+-x11-3.0', version: '>= 3.22'),
-  dependency('libwnck-3.0'),
   cc.find_library('m', required : true),
 ]
 
